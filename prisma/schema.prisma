@@ -22,3 +22,13 @@ model Task {
 
   @@map("tasks")
 }
+
+model Avaliation {
+  id        Int     @id @default(autoincrement())
+  usuario String
+  avaliacao String
+
+  criadaEm DateTime @default(now())
+
+  @@map("avaliations")
+}
