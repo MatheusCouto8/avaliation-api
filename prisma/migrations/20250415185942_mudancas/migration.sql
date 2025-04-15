@@ -1,0 +1,7 @@
+-- CreateTable
+CREATE TABLE "avaliations" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "usuario" TEXT NOT NULL,
+    "avaliacao" TEXT NOT NULL,
+    "criadaEm" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

@@ -15,4 +15,4 @@ class AvaliationModel {
   };
 
 }
-export default new TarefaModel();
+export default new AvaliationModel();

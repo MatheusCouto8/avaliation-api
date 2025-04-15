@@ -1,69 +1,38 @@
-import tarefaModel from "../models/tarefaModel.js";
+import express from "express";
+import avaliationModel from "../models/avaliationModel.js";
 
-class TarefaController {
+class AvaliationController {
   getAll = async (req, res) => {
     try {
-      const tarefas = await tarefaModel.getAll();
-      res.json(tarefas);
+      const avaliacoes = await avaliationModel.getAll();
+      res.json(avaliacoes);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ erro: "Erro ao buscar tarefas" });
+      res.status(500).json({ erro: "Erro ao buscar avaliação" });
     }
   };
 
   create = async (req, res) => {
-    const { descricao } = req.body;
-    // const descricao = req.body.descricao;
+    const { usuario, avaliacao } = req.body;
     try {
-      if (!descricao) {
-        return res.status(400).json({ erro: "Descrição é obrigatória" });
+      if (!usuario || !avaliacao) {
+        return res.status(400).json({ erro: "Usuário e avaliação são obrigatórios" });
       }
 
-      const novaTarefa = await tarefaModel.create(descricao);
-      res.status(201).json(novaTarefa);
+      const novaAvaliation = await avaliationModel.create(usuario, avaliacao);
+      res.status(201).json(novaAvaliation);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ erro: "Erro ao criar tarefa" });
-    }
-  };
-
-  update = async (req, res) => {
-    const { id } = req.params;
-    const { concluida, descricao } = req.body;
-
-    try {
-      const tarefaAtualizada = await tarefaModel.update(
-        Number(id),
-        concluida,
-        descricao
-      );
-
-      if (!tarefaAtualizada) {
-        return res.status(404).json({ erro: "Tarefa não encontrada!" });
-      }
-
-      res.json(tarefaAtualizada);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ erro: "Erro ao atualizar tarefa!" });
-    }
-  };
-
-  delete = async (req, res) => {
-    const { id } = req.params;
-
-    try {
-      const sucesso = await tarefaModel.delete(Number(id));
-
-      if (!sucesso) {
-        return res.status(404).json({ erro: "Tarefa não encontrada" });
-      }
-
-      res.status(200).send({ message: "Tarefa deletada com sucesso!" });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Erro ao excluir tarefa!" });
+      res.status(500).json({ erro: "Erro ao avaliar" });
     }
   };
 }
-export default new TarefaController();
+
+const avaliationController = new AvaliationController();
+const router = express.Router();
+
+// Definindo as rotas e associando os métodos
+router.get("/", avaliationController.getAll);
+router.post("/", avaliationController.create);
+
+export default router;
